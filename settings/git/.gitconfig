@@ -1,0 +1,5 @@
+[core]
+	quotepath = false
+[user]
+	email = $email
+	name = Elfiend

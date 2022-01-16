@@ -1,0 +1,80 @@
+---
+# Reference : https://gist.github.com/mrlesmithjr/f3c15fdd53020a71f55c2032b8be2eda
+- name: Install MacOS Packages
+  hosts: localhost
+  become: false
+  vars:
+    brew_packages:
+      - tree
+      - git
+      - mas
+      - jq
+      - nmap
+      - openssl
+      - ssh-copy-id
+      - wget
+      - zsh
+      - zsh-syntax-highlighting
+      - gpg
+    brew_cask_packages:
+      # Web Browser
+      - google-chrome
+      - chrome-remote-desktop-host
+      # Text editor
+      - obsidian
+      # Message
+      - discord
+      - telegram
+      - mattermost
+      - keybase
+      # File Cloud drives
+      - megasync
+      - dropbox
+      - google-drive
+      # Game
+      - steam
+      # Developer
+      - visual-studio-code
+      - unity-hub
+      - docker
+
+  pre_tasks:
+    - name: Ensuring Homebrew Is Installed
+      stat:
+        path: /usr/local/bin/brew
+      register: homebrew_check
+
+    - name: Fail If Homebrew Is Not Installed and install_homebrew_if_missing Is False
+      fail:
+        msg: Homebrew is missing...Install from https://brew.sh/
+      when:
+        - not homebrew_check.stat.exists
+        - not install_homebrew_if_missing
+
+    - name: Installing Homebrew
+      shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      when:
+        - not homebrew_check.stat.exists
+        - install_homebrew_if_missing
+
+  tasks:
+    - name: Updating Homebrew
+      homebrew:
+        update_homebrew: true
+      when: homebrew_check.stat.exists
+
+    - name: Installing Homebrew Packages
+      homebrew:
+        name: "{{ brew_packages }}"
+        state: present
+      register: result
+      until: result is successful
+      when: homebrew_check.stat.exists
+
+    - name: Installing Homebrew Cask Packages
+      homebrew_cask:
+        name: "{{ brew_cask_packages }}"
+        state: present
+      register: result
+      until: result is successful
+      when: homebrew_check.stat.exists

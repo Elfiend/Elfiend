@@ -13,6 +13,8 @@ Packages=(
 "ssh-copy-id"
 "wget"
 "gpg"
+"mono-libgdiplus"
+"nuget"
 )
 
 Apps=(
@@ -39,6 +41,7 @@ Apps=(
 
 # Developer
 "visual-studio-code"
+"dotnet-sdk"
 "unity-hub"
 "docker"
 )

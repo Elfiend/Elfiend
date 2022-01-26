@@ -16,6 +16,8 @@
       - zsh
       - zsh-syntax-highlighting
       - gpg
+      - mono-libgdiplus
+      - nuget
     brew_cask_packages:
       # Web Browser
       - google-chrome
@@ -35,6 +37,7 @@
       - steam
       # Developer
       - visual-studio-code
+      - dotnet-sdk
       - unity-hub
       - docker
 
